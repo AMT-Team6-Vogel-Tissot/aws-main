@@ -7,3 +7,20 @@
 [aws rekognition](https://github.com/AMT-Team6-Vogel-Tissot/aws-rekognition/tree/develop)
 
 ## structure des liens pour Spring
+
+### POST
+
+ - ajoutObjet: ajout d'un objet dans S3
+    - objet
+ 
+### GET 
+ 
+ - creationBucket: création d'un nouveau bucket
+    - nom 
+ - demandeObjet: demande l'URL s3 pour un objet
+    - nom 
+ - analyse: demande l'analyse d'une image
+    - nom
+    - maxLabels
+    - minConfidence
+ 
