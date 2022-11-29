@@ -23,4 +23,11 @@
     - nom
     - maxLabels
     - minConfidence
+    
+ ## chronologie
+ 
+  - création d'un objet dans S3 (main -> S3)
+    - réussite ou échec
+  - demande l'analyse (main -> rekognition)
+    - envoi du résultat ou échec (rekognition -> main)
  
