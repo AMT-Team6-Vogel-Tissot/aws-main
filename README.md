@@ -23,12 +23,14 @@
 
 ### GET 
  
-| url          | paramètre     | retour                            | code réussite | code erreur                        |
-|--------------|---------------|-----------------------------------|---------------|------------------------------------|
-| objet/publie | nom           | url de l'objet                    | 200           | 404 (objet ou bucket non existant) |
-| objet/existe | nom           | true ou false                     | 200           | pas d'erreur possible              |
-| objets       |               | liste des objets (pleine ou vide) | 200           | 404 (bucket non existant)          |
-| objet/{nom}  | nom dans path | tableau byte                      | 200           | 404 (objet ou bucket no existant)  |
+| url          | paramètre          | retour                            | code réussite | code erreur                        |
+|--------------|--------------------|-----------------------------------|---------------|------------------------------------|
+| objet/publie | nom                | url de l'objet                    | 200           | 404 (objet ou bucket non existant) |
+| objet/existe | nom                | true ou false                     | 200           | pas d'erreur possible              |
+| objets       |                    | liste des objets (pleine ou vide) | 200           | 404 (bucket non existant)          |
+| objet/{nom}  | nom dans path      | tableau byte                      | 200           | 404 (objet ou bucket no existant)  |
+| analyse      | rekognitionRequest | map<string,string>                | 200           | 422 ou 500                         |
+| analyse/base64  | à décider       | map<string,string>                | 200           | 422 ou 500                         |
 
 ### DELETE
 
