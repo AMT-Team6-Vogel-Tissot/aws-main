@@ -15,19 +15,17 @@
  
 ### GET 
  
- - creationBucket: création d'un nouveau bucket
-    - nom 
- - demandeObjet: demande l'URL s3 pour un objet
-    - nom 
- - analyse: demande l'analyse d'une image
-    - nom
-    - maxLabels
-    - minConfidence
+| url          | paramètre     | retour                            | code réussite | code erreur                        |
+|--------------|---------------|-----------------------------------|---------------|------------------------------------|
+| objet/publie | nom           | url de l'objet                    | 200           | 404 (objet ou bucket non existant) |
+| objet/existe | nom           | true ou false                     | 200           | pas d'erreur possible              |
+| objets       |               | liste des objets (pleine ou vide) | 200           | 404 (bucket non existant)          |
+| objet/{name} | nom dans path | tableau byte                      | 200           | 404 (objet ou bucket no existant)  |
     
  ## chronologie
  
   - création d'un objet dans S3 (main -> S3)
     - réussite ou échec
   - demande l'analyse (main -> rekognition)
-    - envoi du résultat ou échec (rekognition -> main)
+    - envoi du résultat ou échec 
  
