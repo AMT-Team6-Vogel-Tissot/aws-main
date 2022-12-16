@@ -1,43 +1,48 @@
 package heig.vd;
 
+
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Paths;
 
+
+
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 
 public class AwsMain
 {
-    public static void main( String[] args ) throws IOException, InterruptedException {
-        String nom = "testsac.jpg";
+    public static void main( String[] args ){
+
+        //////list obj
+
+        HttpResponse<String> responseGetList = Unirest.get("localhost:8080/objets")
+                .asString();
 
 
-        final HttpClient httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+        /////////////////////post obj
 
-        HttpRequest requestPost = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/objet?objectName="+nom))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofFile(Paths.get("file.json")))
-                .build();
 
-        HttpResponse<String> responsePost = httpClient.send(requestPost, HttpResponse.BodyHandlers.ofString());
-        System.out.println(responsePost.statusCode());
-        System.out.println(responsePost.body());
+        HttpResponse<String> requestPost = Unirest.post("http://localhost:8080/objet")
+                .field("file", new File("testsac.jpg"))
+                .field("objectName", "testsac.jpg")
+                .asString();
 
-        HttpRequest requestGet = HttpRequest.newBuilder()
-                .GET()
-                .uri(URI.create("http://localhost:8080/objet/publie?nom="+nom))
-                .setHeader("Accept", "application/json").build();
 
-        HttpResponse<String> responseGet = httpClient.send(requestGet, HttpResponse.BodyHandlers.ofString());
-        System.out.println(responseGet.statusCode());
-        System.out.println(responseGet.body());
+
+        ////////get url obj
+
+        HttpResponse<String> responseGetURL = Unirest.get("localhost:8080/objet/publie?nom=testsac.jpg")
+                .asString();
+
+
+        ///// delete obj
+
+        HttpResponse<String> responseDel = Unirest.delete("localhost:8080/objet/testsac.jpg")
+                .asString();
+
+
 
     }
 }
