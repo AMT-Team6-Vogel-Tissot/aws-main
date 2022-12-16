@@ -17,10 +17,11 @@ public class AwsMain
 
         //////list obj
 
-        HttpResponse<String> responseGetList = Unirest.get("localhost:8080/objets")
+        HttpResponse<String> responseGetList = Unirest.get("http://localhost:8080/objets")
                 .asString();
 
 
+        System.out.println("code status: " + responseGetList.getStatus()+ " reponse: " + responseGetList.getBody());
         /////////////////////post obj
 
 
@@ -30,18 +31,23 @@ public class AwsMain
                 .asString();
 
 
+        System.out.println(requestPost.getBody());
 
         ////////get url obj
 
-        HttpResponse<String> responseGetURL = Unirest.get("localhost:8080/objet/publie?nom=testsac.jpg")
+        HttpResponse<String> responseGetURL = Unirest.get("http://localhost:8080/objet/publie?nom=testsac.jpg")
                 .asString();
+
+        System.out.println(responseGetURL.getBody());
 
 
         ///// delete obj
 
-        HttpResponse<String> responseDel = Unirest.delete("localhost:8080/objet/testsac.jpg")
+        HttpResponse<String> responseDel = Unirest.delete("http://localhost:8080/objet/testsac.jpg")
                 .asString();
 
+
+        System.out.println(responseDel.getBody());
 
 
     }
