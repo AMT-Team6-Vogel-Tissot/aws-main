@@ -6,6 +6,12 @@
 
 [aws rekognition](https://github.com/AMT-Team6-Vogel-Tissot/aws-rekognition/tree/develop)
 
+## Unirest
+
+[unirest](https://github.com/kong/unirest-java)
+
+Unirest permet de faire des requêtes facilement en Java. Postman propose de traduire automatiquement les requêtes faites en code et c'est comme ça que nous avons découvert cette librairie. Elle est de plus mieux documentée (et à jour) que les autres librairies que nous avons trouvé sur internet.
+
 ## structure des liens pour Spring
 
 ### POST
@@ -13,7 +19,11 @@
 | url          | paramètre     | retour                            | code réussite | code erreur                        |
 |--------------|---------------|-----------------------------------|---------------|------------------------------------|
 | objet        | nom, fichier  | nom de l'objet                    | 200           | 404 ou 409                         |
- 
+| analyse      | rekognitionRequest* dans le body| map<string,string>                | 200           | 422 ou 500                         |
+| analyse/base64  | rekognitionRequest* dans le body | map<string,string>                | 200           | 422 ou 500                         |
+
+
+rekognitionRequest: url d'une image, nombre max de lables voulu (facultatif) et le minimum de confidence souhaité (facultatif)
  
 ### PATCH
 
@@ -29,11 +39,7 @@
 | objet/existe | nom                | true ou false                     | 200           | pas d'erreur possible              |
 | objets       |                    | liste des objets (pleine ou vide) | 200           | 404 (bucket non existant)          |
 | objet/{nom}  | nom dans path      | tableau byte                      | 200           | 404 (objet ou bucket no existant)  |
-| analyse      | rekognitionRequest* | map<string,string>                | 200           | 422 ou 500                         |
-| analyse/base64  | à décider       | map<string,string>                | 200           | 422 ou 500                         |
 
-
-* url d'une image, nombre max de lables voulu (facultatif) et le minimum de confidence souhaité (facultatif)
 
 ### DELETE
 
