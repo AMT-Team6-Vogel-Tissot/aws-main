@@ -1,12 +1,6 @@
 package heig.vd;
 
-
-
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-
-
 
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -40,7 +34,6 @@ public class AwsMain
 
         System.out.println(responseGetURL.getBody());
 
-
         ///// demande analyse avec image externe
 
         HttpResponse<String> responseAnaylse = Unirest.post("http://localhost:8082/analyse")
@@ -49,8 +42,6 @@ public class AwsMain
                 .asString();
 
         System.out.println(responseAnaylse.getBody());
-
-
 
         /////image dans S3
 
@@ -69,7 +60,5 @@ public class AwsMain
 
 
         System.out.println(responseDel.getBody());
-
-
     }
 }
