@@ -1,75 +1,94 @@
 package heig.vd;
 
-
-
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-
-
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class AwsMain
 {
-    public static void main( String[] args ){
+    public static void main( String[] args ) throws IOException {
 
-        //////list obj
+        ///// list obj
 
+        System.out.println("LIST OBJECT : ");
         HttpResponse<String> responseGetList = Unirest.get("http://localhost:8080/objets")
                 .asString();
 
+        assertEquals(200,  responseGetList.getStatus());
+        System.out.println(responseGetList.getBody());
 
-        System.out.println("code status: " + responseGetList.getStatus()+ " reponse: " + responseGetList.getBody());
-        /////////////////////post obj
+        ///// post obj
 
-
+        System.out.println("CREATE OBJECT : ");
         HttpResponse<String> requestPost = Unirest.post("http://localhost:8080/objet")
-                .field("file", new File("testsac.jpg"))
-                .field("objectName", "testsac.jpg")
+                .field("file", new File("testBureau.jpg"))
+                .field("objectName", "testBureau.jpg")
                 .asString();
-
+        assertEquals(201, requestPost.getStatus());
 
         System.out.println(requestPost.getBody());
 
-        ////////get url obj
+        ///// get url obj
 
-        HttpResponse<String> responseGetURL = Unirest.get("http://localhost:8080/objet/publie?nom=testsac.jpg")
+        System.out.println("GET URL OBJECT : ");
+        HttpResponse<String> responseGetURL = Unirest.get("http://localhost:8080/objet/publie?nom=testBureau.jpg")
                 .asString();
-
+        assertEquals(200, responseGetURL.getStatus());
         System.out.println(responseGetURL.getBody());
 
+        ///// analyser image dans s3
 
-        ///// demande analyse avec image externe
-
-        HttpResponse<String> responseAnaylse = Unirest.post("http://localhost:8082/analyse")
+        System.out.println("ANALYSE URL OBJECT : ");
+        HttpResponse<String> responseAnaylseS3 = Unirest.post("http://localhost:8081/analyse")
                 .header("Content-Type", "application/json")
-                .body("{\"source\" : \"https://plus.unsplash.com/premium_photo-1663134281768-37fa467e9f5b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80\",\n    \"maxLabels\" : 20,\n    \"minConfidence\" : 70\n}")
+                .body("{\"source\" : "+responseGetURL.getBody()+"}")
                 .asString();
-
-        System.out.println(responseAnaylse.getBody());
-
-
-
-        /////image dans S3
-
-        HttpResponse<String> responseAnaylseS3 = Unirest.post("http://localhost:8082/analyse")
-                .header("Content-Type", "application/json")
-                .body("{\"source\" : "+responseGetURL.getBody()+",\n    \"maxLabels\" : 10}")
-                .asString();
-
+        assertEquals(200, responseAnaylseS3.getStatus());
         System.out.println(responseAnaylseS3.getBody());
-
 
         ///// delete obj
 
-        HttpResponse<String> responseDel = Unirest.delete("http://localhost:8080/objet/testsac.jpg")
+        System.out.println("DELETE OBJECT : ");
+        HttpResponse<String> responseDel = Unirest.delete("http://localhost:8080/objet/testBureau.jpg")
                 .asString();
 
-
+        assertEquals(200, responseDel.getStatus());
         System.out.println(responseDel.getBody());
 
+        ///// upload result on bucket
+
+        System.out.println("UPLOAD RESULT ANALYSE OBJECT : ");
+        Path tempFile = Files.createTempFile("testBureau-result", ".json");
+        try {
+            Files.writeString(tempFile, responseAnaylseS3.getBody());
+        } catch (IOException e) {
+            Files.delete(tempFile);
+            throw e;
+        }
+
+        HttpResponse<String> requestPostResult = Unirest.post("http://localhost:8080/objet")
+                .field("file", new File(String.valueOf(tempFile)))
+                .field("objectName", "testBureau-result.json")
+                .asString();
+
+        assertEquals(201, requestPostResult.getStatus());
+        Files.delete(tempFile);
+        System.out.println(requestPostResult.getBody());
+
+        ///// delete result on bucket
+        System.out.println("DELETE RESULT OBJECT : ");
+
+        HttpResponse<String> responseDelResult = Unirest.delete("http://localhost:8080/objet/testBureau-result.json")
+                .asString();
+
+        assertEquals(200, responseDelResult.getStatus());
+        System.out.println(responseDelResult.getBody());
 
     }
 }
