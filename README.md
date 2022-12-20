@@ -27,9 +27,9 @@ Pour la région, il faut qu'elle corresponde à la colonne `Region` du tableau d
 
 Voici le workflow qu'effectue notre code `main` afin de tester le bon fonctionnement de nos deux microservices :
 - Création d'un objet dans S3
- - Si le bucket n'existe pas, il est créé
- - Si l'objet n'existe pas, il est créé. 
- - Si l'objet existe alors rien n'est fait
+  - Si le bucket n'existe pas, il est créé
+  - Si l'objet n'existe pas, il est créé. 
+  - Si l'objet existe alors rien n'est fait
 - Récupération de l'URL de l'objet
 - Analyse de l'objet à l'aide de rekognition
 - Suppression de l'objet stocké dans S3
