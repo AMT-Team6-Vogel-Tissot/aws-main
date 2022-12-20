@@ -5,11 +5,38 @@ Auteurs : Maëlle Vogel, Olivier Tissot-Daguette
 Ce projet fait suite au projet [aws-find-label](https://github.com/AMT-Team6-Vogel-Tissot/aws-find-label). Nous avons décidé
 de le transformer en deux microservices. Une partie s'occupant de la gestion de S3 et une autre de rekognition.
 
+Afin de pouvoir utiliser nos deux microservices, il est nécessaire d'avoir un fichier `.env` ayant ce format à la racine du projet :
+
+```
+AWS_ACCESS_KEY_ID =
+AWS_SECRET_ACCESS_KEY =
+REGION = 
+BUCKET =
+URL_DURATION =                  # Durée en minutes
+```
+
+Pour la région, il faut qu'elle corresponde à la colonne `Region` du tableau disponible [ici](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.Regions).
+
 ## Lien pour les deux microservices
 
 [aws s3](https://github.com/AMT-Team6-Vogel-Tissot/aws-s3/tree/develop)
 
 [aws rekognition](https://github.com/AMT-Team6-Vogel-Tissot/aws-rekognition/tree/develop)
+
+## Explication du contenu du code main 
+
+Voici le workflow qu'effectue notre code `main` afin de tester le bon fonctionnement de nos deux microservices :
+- Création d'un objet dans S3
+ - Si le bucket n'existe pas, il est créé
+ - Si l'objet n'existe pas, il est créé. 
+ - Si l'objet existe alors rien n'est fait
+- Récupération de l'URL de l'objet
+- Analyse de l'objet à l'aide de rekognition
+- Suppression de l'objet stocké dans S3
+- Création de l'objet résultat dans S3
+- Suppression de l'objet résultat dans S3
+
+Nous testons tout au long de la procédure si les `status codes` sont corrects à l'aide d'assert.
 
 ## Unirest
 
