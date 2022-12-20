@@ -68,12 +68,14 @@ L'objectif est de build les images dans les GitHub actions puis de le push sur l
 
 Il a été choisi de passer le fichier .env en paramètre au moment de lancer le docker run pour les deux microservices. Cette décision a été prise car créer une image avec un .env copié dedans peut être un risque pour la sécurité et le fonctionnement des dockers secrets est difficile à prendre en main.
 
+Les images doivent être pull en local avant d'être pouvoir lancer.
+
 
 ```
-
-sudo docker run --env-file .env -p 8080:8080 awss3:latest
-sudo docker run --env-file .env -p 8081:8081 awsrekognition:latest
-
+sudo docker pull ghcr.io/amt-team6-vogel-tissot/aws-s3:main
+sudo docker run --env-file .env -p 8080:8080 aws-s3:main
+sudo docker pull ghcr.io/amt-team6-vogel-tissot/aws-rekognition:main
+sudo docker run --env-file .env -p 8081:8081 aws-rekognition:main
 
 ```
 
